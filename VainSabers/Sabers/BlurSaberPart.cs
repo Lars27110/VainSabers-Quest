@@ -264,7 +264,7 @@ namespace VainSabers.Sabers
             var radius = Mathf.Abs(rawRadius);
 
             var first = samples[0];
-            var last = samples[^1];
+            var last = samples[samples.Length - 1];
             var firstPos = first.position + first.forward * zPos;
             var lastPos = last.position + last.forward * zPos;
 
@@ -328,7 +328,6 @@ namespace VainSabers.Sabers
 
             return m_poseSamples;
         }
-        
         private Color ShiftHue(Color color, float hueShift)
         {
             Color.RGBToHSV(color, out var h, out var s, out var v);

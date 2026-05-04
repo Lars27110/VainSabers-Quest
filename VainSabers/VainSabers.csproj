@@ -27,6 +27,9 @@
 
     <ItemGroup>
         <None Include="VainSabers.csproj.user" Condition="Exists('VainSabers.csproj.user')"/>
+        <None Remove="VainSabers" />
+        <None Remove="VainSabers.manifest" />
+        <None Remove="vs_assets.manifest" />
     </ItemGroup>
     
     <ItemGroup>
@@ -138,6 +141,10 @@
       <EmbeddedResource Include="settings.bsml" />
       <None Remove="vs_assets" />
       <EmbeddedResource Include="vs_assets" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="VainSabers.csproj.user" />
     </ItemGroup>
 
 </Project>
