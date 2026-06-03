@@ -296,7 +296,7 @@ public class BlurSaberData : MonoBehaviour
             
             sb.AppendLine($"lit {(part.Lit ? "1" : "0")}");
 
-            sb.AppendLine();
+            sb.AppendLine(); 
         }
 
         try
