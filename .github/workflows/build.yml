@@ -90,7 +90,7 @@ jobs:
           name: VainSabers-${{ env.COMMIT_SHORT_SHA }}-Release.zip
           path: ${{ steps.build-release.outputs.artifactpath }}
 
-      - name: Upload Release
+      - name: Upload Debug
         uses: actions/upload-artifact@v7
         with:
           name: VainSabers-${{ env.COMMIT_SHORT_SHA }}-Debug.zip
