@@ -13,7 +13,7 @@ namespace VainSabers.Sabers
         public Vector4 tangent;
         public Vector4 color;
         public Vector2 uv;
-        public Vector3 bladeDir;
+        public Vector4 bladeDir;
     }
 
     internal class BlurTube
@@ -69,7 +69,7 @@ namespace VainSabers.Sabers
                 new VertexAttributeDescriptor(VertexAttribute.Tangent, VertexAttributeFormat.Float32, 4),  // planeNormal.xyz + sweepFactor
                 new VertexAttributeDescriptor(VertexAttribute.Color, VertexAttributeFormat.Float32, 4),     // color
                 new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2), // uv
-                new VertexAttributeDescriptor(VertexAttribute.TexCoord1, VertexAttributeFormat.Float32, 3)  // bladeDir
+                new VertexAttributeDescriptor(VertexAttribute.TexCoord1, VertexAttributeFormat.Float32, 4)  // bladeDir + opacity
             );
             // Set initial vertex data and indices
             TubeMesh.SetVertexBufferData(_vertices, 0, 0, vertCount, 0, MeshUpdateFlags.DontRecalculateBounds);
@@ -77,14 +77,14 @@ namespace VainSabers.Sabers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetVertex(int idx, Vector3 pos, Vector3 normal, float sweepCoordinate, Color color, Vector3 planeNormal, Vector3 bladeDir, float sweepRatio)
+        public void SetVertex(int idx, Vector3 pos, Vector3 normal, float sweepCoordinate, Color color, Vector3 planeNormal, Vector3 bladeDir, float sweepRatio, float opacity)
         {
             ref var v = ref _vertices[idx];
             v.position = pos;
             v.normal = normal;
             v.tangent = new Vector4(planeNormal.x, planeNormal.y, planeNormal.z, 0);
             v.uv = new Vector2(sweepCoordinate, Mathf.Clamp01((sweepRatio - 0.7f) * 0.02f));
-            v.bladeDir = bladeDir;
+            v.bladeDir = new Vector4(bladeDir.x, bladeDir.y, bladeDir.z, opacity);
             v.color = color;
         }
 

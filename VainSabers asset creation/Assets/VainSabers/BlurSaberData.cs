@@ -45,6 +45,8 @@ namespace VainSabers
         newPart.EndCustomColorWeight = 1f;
         newPart.StartGlow = 1f;
         newPart.EndGlow = 1f;
+        newPart.StartOpacity = 1f;
+        newPart.EndOpacity = 1f;
         newPart.Inverted = false;
         newPart.BlurFactor = 1f;
         newPart.BlurFadeFactor = 1f;
@@ -52,6 +54,7 @@ namespace VainSabers
         newPart.EndCapExtension = 0.25f;
         newPart.UseLookDir = false;
         newPart.LookDir = Vector3.zero;
+        newPart.DepthOffset = 0f;
 
         m_components.Add(newPart);
         return newPart;
@@ -173,8 +176,17 @@ namespace VainSabers
                 case "endGlow":
                     currentPart.EndGlow = vals[0];
                     break;
+                case "startOpacity":
+                    currentPart.StartOpacity = Mathf.Clamp01(vals[0]);
+                    break;
+                case "endOpacity":
+                    currentPart.EndOpacity = Mathf.Clamp01(vals[0]);
+                    break;
                 case "inverted":
                     currentPart.Inverted = Mathf.Approximately(vals[0], 1f);
+                    break;
+                case "depthOffset":
+                    currentPart.DepthOffset = vals[0];
                     break;
                 case "blur":
                     currentPart.BlurFactor = Mathf.Clamp01(vals[0]);

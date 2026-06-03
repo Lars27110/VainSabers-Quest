@@ -31,6 +31,13 @@ namespace VainSabers.Sabers
         public float StartGlow = 1;
         public float EndGlow = 1;
 
+        [Range(0f, 1f)]
+        public float StartOpacity = 1f;
+        [Range(0f, 1f)]
+        public float EndOpacity = 1f;
+
+        public float DepthOffset = 0f;
+
         public bool Inverted;
         public bool Lit;
 
@@ -71,6 +78,7 @@ namespace VainSabers.Sabers
         private Material? m_runtimeInvertedMaterial;
         private Material? m_runtimeLitMaterial;
         private Material? m_runtimeLitInvertedMaterial;
+        private MaterialPropertyBlock m_propertyBlock = null!;
         
         public PluginConfig Config = null!;
 
@@ -125,7 +133,13 @@ namespace VainSabers.Sabers
             
             var activeMat = GetActiveMaterial();
             if (activeMat != null)
+            {
                 activeMat.renderQueue = 3600 + RenderQueueOffset;
+                
+                m_propertyBlock ??= new MaterialPropertyBlock();
+                m_propertyBlock.SetFloat("_DepthOffset", DepthOffset + (Inverted ? 0f : 0.001f));
+                m_meshRenderer.SetPropertyBlock(m_propertyBlock);
+            }
 
             m_meshRenderer.sharedMaterial = activeMat;
             m_meshFilter.mesh = m_blurTube.TubeMesh;
@@ -223,7 +237,7 @@ namespace VainSabers.Sabers
             var startRad = Inverted ? -StartRadius : StartRadius;
             var endRad = Inverted ? -EndRadius : EndRadius;
             if (EnableEndCaps)
-                BuildRing(samples, 0 - StartRadius * 0.25f * EndCapExtension, startRad, true, startCol, ref idx);
+                BuildRing(samples, 0 - StartRadius * 0.25f * EndCapExtension, startRad, true, startCol, StartOpacity, ref idx);
             var mainRingCount = EnableEndCaps ? RingCount - 2 : RingCount;
 
             for (var i = 0; i < mainRingCount; i++)
@@ -236,10 +250,12 @@ namespace VainSabers.Sabers
                 
                 BuildRing(samples, t * Length, radius,
                     false,
-                    Color.Lerp(startCol, endCol, t), ref idx);
+                    Color.Lerp(startCol, endCol, t),
+                    Mathf.Lerp(StartOpacity, EndOpacity, t),
+                    ref idx);
             }
             if (EnableEndCaps)
-                BuildRing(samples, Length + EndRadius * 0.25f * EndCapExtension, endRad, true, endCol, ref idx);
+                BuildRing(samples, Length + EndRadius * 0.25f * EndCapExtension, endRad, true, endCol, EndOpacity, ref idx);
         }
         
         Pose SampleAlongCurve(Pose[] samples, float t)
@@ -259,6 +275,7 @@ namespace VainSabers.Sabers
             float rawRadius,
             bool isZero,
             Color color,
+            float opacity,
             ref int idx)
         {
             var radius = Mathf.Abs(rawRadius);
@@ -308,7 +325,8 @@ namespace VainSabers.Sabers
                     color,
                     plane,
                     interpSample.forward,
-                    sweepRatio * BlurFadeFactor
+                    sweepRatio * BlurFadeFactor,
+                    opacity
                 );
             }
 

@@ -30,12 +30,15 @@
             ColorMask 0
 
             CGPROGRAM
+            // #pragma multi_compile_instancing
             #pragma fragment frag
-            #pragma target 2.0
+            // #pragma target 2.0
+            #include "UnityCG.cginc"
             #include "BlurPart.cginc"
 
             fixed4 frag(v2f i) : SV_Target
             {
+                // UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 SaberFragVariables vars = GetCommonSaberVars(i);
                 if(vars.alpha > 0.999)
                     return 1; // color ignored, depth written
@@ -56,8 +59,9 @@
         Pass
         {
             CGPROGRAM
+            // #pragma multi_compile_instancing
             #pragma fragment frag
-            #pragma target 2.0
+            // #pragma target 2.0
 
             #include "UnityCG.cginc"
             #include "BlurPart.cginc"
@@ -99,6 +103,7 @@
 
             fixed4 frag(v2f i) : SV_Target
             {
+                // UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 SaberFragVariables vars = GetCommonSaberVars(i);
 
                 // Lighting

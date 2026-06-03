@@ -61,13 +61,16 @@ namespace VainSabers
                 sb.AppendLine($"startColor {FormatFloat(part.StartColor.r)} {FormatFloat(part.StartColor.g)} {FormatFloat(part.StartColor.b)}");
                 sb.AppendLine($"startCustomWeight {FormatFloat(part.StartCustomColorWeight)}");
                 sb.AppendLine($"startGlow {FormatFloat(part.StartGlow)}");
+                sb.AppendLine($"startOpacity {FormatFloat(part.StartOpacity)}");
 
                 sb.AppendLine($"endRad {FormatFloat(part.EndRadius)}");
                 sb.AppendLine($"endColor {FormatFloat(part.EndColor.r)} {FormatFloat(part.EndColor.g)} {FormatFloat(part.EndColor.b)}");
                 sb.AppendLine($"endCustomWeight {FormatFloat(part.EndCustomColorWeight)}");
                 sb.AppendLine($"endGlow {FormatFloat(part.EndGlow)}");
+                sb.AppendLine($"endOpacity {FormatFloat(part.EndOpacity)}");
 
                 sb.AppendLine($"inverted {(part.Inverted ? "1" : "0")}");
+                sb.AppendLine($"depthOffset {FormatFloat(part.DepthOffset)}");
                 sb.AppendLine($"blur {FormatFloat(part.BlurFactor)}");
                 sb.AppendLine($"blurFade {FormatFloat(part.BlurFadeFactor)}");
                 sb.AppendLine($"enableEndCaps {(part.EnableEndCaps ? "1" : "0")}");

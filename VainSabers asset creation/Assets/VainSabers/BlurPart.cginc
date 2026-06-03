@@ -9,7 +9,7 @@ struct appdata_t {
     float4 planeNormal : TANGENT;  // tangent xyz vector in model space, w is sweepFactor
     float2 uv : TEXCOORD0;
     float4 color  : COLOR;
-    float3 bladeDir : TEXCOORD1;
+    float4 bladeDir : TEXCOORD1;
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
@@ -20,7 +20,8 @@ struct v2f {
     float3 normal   : TEXCOORD2;
     float4 color : TEXCOORD3;
     float3 worldPos  : TEXCOORD4;
-    float3 bladeDir : TEXCOORD5;
+    float4 bladeDir : TEXCOORD5;
+    UNITY_VERTEX_OUTPUT_STEREO
 };
 
 float _Glow;
@@ -30,6 +31,8 @@ v2f vert (appdata_t v)
 {
     v2f o;
     UNITY_SETUP_INSTANCE_ID(v);
+    UNITY_INITIALIZE_OUTPUT(v2f, o);
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
     // standard position + uv
     o.vertex = UnityObjectToClipPos(v.vertex);
@@ -45,7 +48,7 @@ v2f vert (appdata_t v)
     // compute view direction (fragment → camera)
     float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
     o.worldPos = worldPos;
-    o.bladeDir = UnityObjectToWorldNormal(v.bladeDir);
+    o.bladeDir = float4(UnityObjectToWorldNormal(v.bladeDir.xyz), v.bladeDir.w);
 
     return o;
 }
@@ -76,6 +79,7 @@ SaberFragVariables GetCommonSaberVars(v2f vertStage)
     // fadeFactor: How much the blade should fade out when in motion
     // bladeFactor: How much this fragment is the blade or the handle (0 is handle, 1 is blade)
     // edgeSoftness: The percent from the edge to the middle that the "blurry" part of the fade takes up
+    // the final opacity multiplier is the w component of the bladeDir vector
     
     // Safe viewDir
     float3 viewDelta = _WorldSpaceCameraPos.xyz - vertStage.worldPos;
@@ -112,6 +116,8 @@ SaberFragVariables GetCommonSaberVars(v2f vertStage)
     commonVars.alpha = lerp(1.0, commonVars.alpha, blurStrength);
     commonVars.alpha /= denom + 1;
     commonVars.alpha *= 1.1;
+    commonVars.alpha = saturate(commonVars.alpha);
+    commonVars.alpha *= vertStage.bladeDir.w;
     commonVars.alpha = saturate(commonVars.alpha);
     // Safe normals
     commonVars.viewDir = viewDir;

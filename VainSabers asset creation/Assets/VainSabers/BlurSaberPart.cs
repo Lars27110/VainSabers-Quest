@@ -23,6 +23,13 @@ namespace VainSabers.Sabers
         public float StartGlow = 1;
         public float EndGlow = 1;
 
+        [Range(0f, 1f)]
+        public float StartOpacity = 1f;
+        [Range(0f, 1f)]
+        public float EndOpacity = 1f;
+
+        public float DepthOffset = 0f;
+
         public bool Inverted;
 
         public float BlurFactor = 1;
@@ -63,6 +70,7 @@ namespace VainSabers.Sabers
         private Material? m_runtimeInvertedMaterial;
         private Material? m_runtimeLitMaterial;
         private Material? m_runtimeLitInvertedMaterial;
+        private MaterialPropertyBlock m_propertyBlock = null!;
 
         private void OnEnable()
         {
@@ -129,6 +137,12 @@ namespace VainSabers.Sabers
                 activeMat.renderQueue = (Inverted ? InvertedMaterial.renderQueue : Material.renderQueue) + RenderQueueOffset + 500;
 
             m_meshRenderer.sharedMaterial = Inverted ? InvertedMaterial : Material;
+            if (m_meshRenderer.sharedMaterial != null)
+            {
+                m_propertyBlock ??= new MaterialPropertyBlock();
+                m_propertyBlock.SetFloat("_DepthOffset", DepthOffset + (Inverted ? 0f : 0.001f));
+                m_meshRenderer.SetPropertyBlock(m_propertyBlock);
+            }
             m_meshFilter.mesh = m_blurTube.TubeMesh;
 
             RebuildVerts();
@@ -169,7 +183,7 @@ namespace VainSabers.Sabers
             float startRad = Inverted ? -StartRadius : StartRadius;
             float endRad = Inverted ? -EndRadius : EndRadius;
             if (EnableEndCaps)
-                BuildRing(samples, 0 - StartRadius * 0.25f * EndCapExtension, startRad, true, startCol, ref idx);
+                BuildRing(samples, 0 - StartRadius * 0.25f * EndCapExtension, startRad, true, startCol, StartOpacity, ref idx);
             int mainRingCount = EnableEndCaps ? RingCount - 2 : RingCount;
 
             for (int i = 0; i < mainRingCount; i++)
@@ -182,10 +196,12 @@ namespace VainSabers.Sabers
                 
                 BuildRing(samples, t * Length, radius,
                     false,
-                    Color.Lerp(startCol, endCol, t), ref idx);
+                    Color.Lerp(startCol, endCol, t),
+                    Mathf.Lerp(StartOpacity, EndOpacity, t),
+                    ref idx);
             }
             if (EnableEndCaps)
-                BuildRing(samples, Length + EndRadius * 0.25f * EndCapExtension, endRad, true, endCol, ref idx);
+                BuildRing(samples, Length + EndRadius * 0.25f * EndCapExtension, endRad, true, endCol, EndOpacity, ref idx);
         }
 
         Pose LerpPose(Pose a, Pose b, float t)
@@ -220,6 +236,7 @@ namespace VainSabers.Sabers
             float rawRadius,
             bool isZero,
             Color color,
+            float opacity,
             ref int idx)
         {
             var radius = Mathf.Abs(rawRadius);
@@ -270,14 +287,15 @@ namespace VainSabers.Sabers
                     color,
                     plane,
                     interpSample.forward,
-                    sweepRatio * BlurFadeFactor
+                    sweepRatio * BlurFadeFactor,
+                    opacity
                 );
             }
 
             idx += ringVerts;
         }
 
-        private void SetVertex(int idx, Vector3 pos, Vector3 normal, float sweepCoordinate, Color color, Vector3 planeNormal, Vector3 bladeDir, float sweepRatio)
+        private void SetVertex(int idx, Vector3 pos, Vector3 normal, float sweepCoordinate, Color color, Vector3 planeNormal, Vector3 bladeDir, float sweepRatio, float opacity)
         {
             if (m_blurTube == null)
                 return;
@@ -285,7 +303,7 @@ namespace VainSabers.Sabers
             m_blurTube.Normals[idx] = normal;
             m_blurTube.Tangents[idx] = new Vector4(planeNormal.x, planeNormal.y, planeNormal.z, 0);
             m_blurTube.Uvs[idx] = new Vector2(sweepCoordinate, Mathf.Clamp01((sweepRatio - 0.7f) * 0.02f));
-            m_blurTube.BladeDirs[idx] = bladeDir;
+            m_blurTube.BladeDirs[idx] = new Vector4(bladeDir.x, bladeDir.y, bladeDir.z, opacity);
             m_blurTube.Colors[idx] = color;
         }
         

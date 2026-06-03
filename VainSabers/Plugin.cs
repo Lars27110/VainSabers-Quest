@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.GameplaySetup;
 using BeatSaberMarkupLanguage.Util;
@@ -71,6 +72,10 @@ internal class Plugin
 
 public static class VainSabersAssets
 {
+    private static readonly bool DEBUG_LOAD_VS_ASSETS_FROM_FILE = true;
+    private const string VS_ASSETS_FILENAME = "vs_assets";
+    private const string VS_ASSETS_PROJECT_PATH = @"C:\Users\dbasp\RiderProjects\VainSabers\VainSabers\vs_assets";
+
     public static Shader? TestShader { get; private set; }
     public static Shader? SaberShader { get; private set; }
     public static Shader? VertexGlowShader { get; private set; }
@@ -83,9 +88,19 @@ public static class VainSabersAssets
     public static Material? InvertedLitSaberMaterial { get; private set; }
     public static void LoadAssets()
     {   
-        Plugin.Print("Loading vs_assets from resource");
-        var assets = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("VainSabers.vs_assets"));
-        if (assets)
+        AssetBundle? assets;
+        if (DEBUG_LOAD_VS_ASSETS_FROM_FILE)
+        {
+            var assetPath = File.Exists(VS_ASSETS_PROJECT_PATH) ? VS_ASSETS_PROJECT_PATH : FindProjectAssetFile(VS_ASSETS_FILENAME);
+            Plugin.Print($"Loading vs_assets from project file: {assetPath ?? "not found"}");
+            assets = assetPath != null ? AssetBundle.LoadFromFile(assetPath) : null;
+        }
+        else
+        {
+            Plugin.Print("Loading vs_assets from resource");
+            assets = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("VainSabers.vs_assets"));
+        }
+        if (assets != null)
         {
             foreach (var name in assets.GetAllAssetNames())
             {
@@ -107,5 +122,19 @@ public static class VainSabersAssets
         {
             Plugin.Print("Failed to load vs_assets");
         }
+    }
+
+    private static string? FindProjectAssetFile(string fileName)
+    {
+        var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        for (var i = 0; i < 10 && directory != null; i++)
+        {
+            var candidate = Path.Combine(directory, fileName);
+            if (File.Exists(candidate))
+                return candidate;
+            directory = Path.GetDirectoryName(directory);
+        }
+
+        return null;
     }
 }

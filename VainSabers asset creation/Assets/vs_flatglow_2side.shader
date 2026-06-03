@@ -34,17 +34,22 @@ Shader "Unlit/vs_flatglow_2side"
                 {
                     float4 vertex : POSITION;
                     float4 color  : COLOR;
+                    UNITY_VERTEX_INPUT_INSTANCE_ID
                 };
     
                 struct v2f
                 {
                     float4 pos   : SV_POSITION;
                     fixed4 color : COLOR0;
+                    UNITY_VERTEX_OUTPUT_STEREO
                 };
     
                 v2f vert (appdata v)
                 {
                     v2f o;
+                    UNITY_SETUP_INSTANCE_ID(v);
+                    UNITY_INITIALIZE_OUTPUT(v2f, o);
+                    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                     o.pos   = UnityObjectToClipPos(v.vertex);
                     o.color = v.color;
                     return o;
@@ -82,17 +87,22 @@ Shader "Unlit/vs_flatglow_2side"
                 {
                     float4 vertex : POSITION;
                     float4 color  : COLOR;
+                    UNITY_VERTEX_INPUT_INSTANCE_ID
                 };
     
                 struct v2f
                 {
                     float4 pos   : SV_POSITION;
                     fixed  alpha : TEXCOORD0;
+                    UNITY_VERTEX_OUTPUT_STEREO
                 };
     
                 v2f vert (appdata v)
                 {
                     v2f o;
+                    UNITY_SETUP_INSTANCE_ID(v);
+                    UNITY_INITIALIZE_OUTPUT(v2f, o);
+                    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                     o.pos   = UnityObjectToClipPos(v.vertex);
                     o.alpha = v.color.a;
                     return o;

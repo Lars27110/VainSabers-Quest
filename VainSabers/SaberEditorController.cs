@@ -255,6 +255,13 @@ internal class SaberEditorController : MonoBehaviour
             set => ApplyToBoth(p => p.StartGlow = Mathf.Max(0f, value));
         }
 
+        [UIValue("PartStartOpacity")]
+        private float PartStartOpacity
+        {
+            get => m_currentPartRight?.StartOpacity ?? 1f;
+            set => ApplyToBoth(p => p.StartOpacity = Mathf.Clamp01(value));
+        }
+
         // ---------------- End Properties ----------------
         [UIValue("PartEndRadius")]
         private float PartEndRadius
@@ -311,6 +318,13 @@ internal class SaberEditorController : MonoBehaviour
         {
             get => m_currentPartRight?.EndGlow ?? 1f;
             set => ApplyToBoth(p => p.EndGlow = Mathf.Max(0f, value));
+        }
+
+        [UIValue("PartEndOpacity")]
+        private float PartEndOpacity
+        {
+            get => m_currentPartRight?.EndOpacity ?? 1f;
+            set => ApplyToBoth(p => p.EndOpacity = Mathf.Clamp01(value));
         }
 
         // ---------------- Other ----------------
@@ -377,6 +391,13 @@ internal class SaberEditorController : MonoBehaviour
             set => ApplyToBoth(p => p.RenderQueueOffset = Mathf.RoundToInt(value));
         }
 
+        [UIValue("PartDepthOffset")]
+        private float PartDepthOffset
+        {
+            get => m_currentPartRight?.DepthOffset ?? 0f;
+            set => ApplyToBoth(p => p.DepthOffset = value);
+        }
+
         [UIAction("#post-parse")]
         private void PostParse()
         {
@@ -402,6 +423,7 @@ internal class SaberEditorController : MonoBehaviour
         [UIComponent("StartColorB")] private SliderSetting StartColorB = null!;
         [UIComponent("StartWeight")] private SliderSetting StartWeight = null!;
         [UIComponent("StartGlow")] private SliderSetting StartGlow = null!;
+        [UIComponent("StartOpacity")] private SliderSetting StartOpacity = null!;
 
         [UIComponent("EndRadius")] private SliderSetting EndRadius = null!;
         [UIComponent("EndColorR")] private SliderSetting EndColorR = null!;
@@ -409,6 +431,7 @@ internal class SaberEditorController : MonoBehaviour
         [UIComponent("EndColorB")] private SliderSetting EndColorB = null!;
         [UIComponent("EndWeight")] private SliderSetting EndWeight = null!;
         [UIComponent("EndGlow")] private SliderSetting EndGlow = null!;
+        [UIComponent("EndOpacity")] private SliderSetting EndOpacity = null!;
 
         [UIComponent("InvertedToggle")] private ToggleSetting InvertedToggle = null!;
         [UIComponent("LitToggle")] private ToggleSetting LitToggle = null!;
@@ -419,27 +442,31 @@ internal class SaberEditorController : MonoBehaviour
         [UIComponent("BulgeAmount")] private SliderSetting BulgeAmount = null!;
         [UIComponent("MinimumRings")] private SliderSetting MinimumRings = null!;
         [UIComponent("RenderQueueOffset")] private SliderSetting RenderQueueOffset = null!;
+        [UIComponent("DepthOffset")] private SliderSetting DepthOffset = null!;
         
 #pragma warning restore CS0649
         // Refresh all bound UI values
         private void RefreshUI()
         {
             var part = m_currentPartRight ?? m_currentPartLeft;
+            float length = 0.1f;
             if (part == null)
             {
                 PosX.Value = PosY.Value = PosZ.Value = 0f;
                 RotX.Value = RotY.Value = RotZ.Value = 0f;
-                Length.Value = 0.1f;
+                Length.Value = Mathf.Pow(length, 1f / 3f);
 
                 HueShift.Value = 0.0f;
 
                 StartRadius.Value = 0.01f;
                 StartColorR.Value = StartColorG.Value = StartColorB.Value = 0f;
                 StartWeight.Value = StartGlow.Value = 0f;
+                StartOpacity.Value = 1f;
 
                 EndRadius.Value = 0.01f;
                 EndColorR.Value = EndColorG.Value = EndColorB.Value = 0f;
                 EndWeight.Value = EndGlow.Value = 0f;
+                EndOpacity.Value = 1f;
 
                 InvertedToggle.Value = false;
                 BlurFactor.Value = 1f;
@@ -448,6 +475,7 @@ internal class SaberEditorController : MonoBehaviour
                 BulgeAmount.Value = 0f;
                 MinimumRings.Value = 4;
                 RenderQueueOffset.Value = 0f;
+                DepthOffset.Value = 0f;
                 LitToggle.Value = false;
                 
                 return;
@@ -461,8 +489,9 @@ internal class SaberEditorController : MonoBehaviour
             RotX.Value = t.localEulerAngles.x;
             RotY.Value = t.localEulerAngles.y;
             RotZ.Value = t.localEulerAngles.z;
-
-            Length.Value = part.Length;
+            
+            length = part.Length;
+            Length.Value = Mathf.Pow(length, 1f / 3f);
             
             HueShift.Value = part.HueShift;
 
@@ -472,6 +501,7 @@ internal class SaberEditorController : MonoBehaviour
             StartColorB.Value = part.StartColor.b;
             StartWeight.Value = part.StartCustomColorWeight;
             StartGlow.Value = part.StartGlow;
+            StartOpacity.Value = part.StartOpacity;
 
             EndRadius.Value = part.EndRadius;
             EndColorR.Value = part.EndColor.r;
@@ -479,6 +509,7 @@ internal class SaberEditorController : MonoBehaviour
             EndColorB.Value = part.EndColor.b;
             EndWeight.Value = part.EndCustomColorWeight;
             EndGlow.Value = part.EndGlow;
+            StartOpacity.Value = part.StartOpacity;
 
             InvertedToggle.Value = part.Inverted;
             BlurFactor.Value = part.BlurFactor;
@@ -488,6 +519,7 @@ internal class SaberEditorController : MonoBehaviour
             BulgeAmount.Value = part.BulgeAmount;
             MinimumRings.Value = part.MinimumRings;
             RenderQueueOffset.Value = part.RenderQueueOffset;
+            DepthOffset.Value = part.DepthOffset;
             
             LitToggle.Value = part.Lit;
         }

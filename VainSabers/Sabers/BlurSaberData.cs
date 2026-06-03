@@ -54,6 +54,8 @@ public class BlurSaberData : MonoBehaviour
         newPart.EndCustomColorWeight = 1f;
         newPart.StartGlow = 1f;
         newPart.EndGlow = 1f;
+        newPart.StartOpacity = 1f;
+        newPart.EndOpacity = 1f;
         newPart.Inverted = false;
         newPart.BlurFactor = 1f;
         newPart.BlurFadeFactor = 1f;
@@ -62,6 +64,7 @@ public class BlurSaberData : MonoBehaviour
         newPart.UseLookDir = false;
         newPart.LookDir = Vector3.zero;
         newPart.Lit = false;
+        newPart.DepthOffset = 0f;
         
         newPart.Config = m_config!;
 
@@ -175,6 +178,9 @@ public class BlurSaberData : MonoBehaviour
                 case "startGlow":
                     currentPart.StartGlow = vals[0];
                     break;
+                case "startOpacity":
+                    currentPart.StartOpacity = vals[0];
+                    break;
                 case "endRad":
                     currentPart.EndRadius = vals[0];
                     break;
@@ -186,6 +192,9 @@ public class BlurSaberData : MonoBehaviour
                     break;
                 case "endGlow":
                     currentPart.EndGlow = vals[0];
+                    break;
+                case "endOpacity":
+                    currentPart.EndOpacity = vals[0];
                     break;
                 case "inverted":
                     currentPart.Inverted = Mathf.Approximately(vals[0], 1f);
@@ -216,6 +225,9 @@ public class BlurSaberData : MonoBehaviour
                     break;
                 case "renderQueueOffset":
                     currentPart.RenderQueueOffset = Mathf.RoundToInt(vals[0]);
+                    break;
+                case "depthOffset":
+                    currentPart.DepthOffset = vals[0];
                     break;
                 case "lit":
                     currentPart.Lit = Mathf.Approximately(vals[0], 1f);
@@ -265,12 +277,14 @@ public class BlurSaberData : MonoBehaviour
             sb.AppendLine($"endColor {FormatFloat(part.EndColor.r)} {FormatFloat(part.EndColor.g)} {FormatFloat(part.EndColor.b)}");
             sb.AppendLine($"endCustomWeight {FormatFloat(part.EndCustomColorWeight)}");
             sb.AppendLine($"endGlow {FormatFloat(part.EndGlow)}");
+            sb.AppendLine($"endOpacity {FormatFloat(part.EndOpacity)}");
 
             sb.AppendLine($"inverted {(part.Inverted ? "1" : "0")}");
             sb.AppendLine($"blur {FormatFloat(part.BlurFactor)}");
             sb.AppendLine($"blurFade {FormatFloat(part.BlurFadeFactor)}");
             sb.AppendLine($"enableEndCaps {(part.EnableEndCaps ? "1" : "0")}");
             sb.AppendLine($"endCapExtension {FormatFloat(part.EndCapExtension)}");
+            sb.AppendLine($"endOpacity {FormatFloat(part.EndOpacity)}");
 
             sb.AppendLine($"lookDir {FormatFloat(part.LookDir.x)} {FormatFloat(part.LookDir.y)} {FormatFloat(part.LookDir.z)}");
             sb.AppendLine($"useLookDir {(part.UseLookDir ? "1" : "0")}");
@@ -278,6 +292,7 @@ public class BlurSaberData : MonoBehaviour
             sb.AppendLine($"bulgeAmount {FormatFloat(part.BulgeAmount)}");
             sb.AppendLine($"minimumRings {part.MinimumRings}");
             sb.AppendLine($"renderQueueOffset {part.RenderQueueOffset}");
+            sb.AppendLine($"depthOffset {FormatFloat(part.DepthOffset)}");
             
             sb.AppendLine($"lit {(part.Lit ? "1" : "0")}");
 

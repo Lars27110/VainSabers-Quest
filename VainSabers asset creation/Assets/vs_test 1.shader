@@ -27,12 +27,14 @@ Shader "VainSabers/Test1"
 
 			struct v2f
 			{
-				float4 vertex : POSITION;
-			};
+				float4 vertex : POSITION;				UNITY_VERTEX_OUTPUT_STEREO			};
 			
 			v2f vert (appdata v)
 			{
 				v2f o;
+				UNITY_SETUP_INSTANCE_ID(v);
+				UNITY_INITIALIZE_OUTPUT(v2f, o);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				return o;
 			}
