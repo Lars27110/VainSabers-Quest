@@ -596,6 +596,8 @@ internal class SaberEditorController : MonoBehaviour
             createHandle: false,
             position: new Vector3(0f, -69420f, 0f),
             rotation: Quaternion.Euler(0f, 0f, 0f));
+        
+        floatingScreen.GetComponent<Canvas>().sortingOrder = 10;
 
         floatingScreen.SetRootViewController(editorViewController, ViewController.AnimationType.None);
         floatingScreen.transform.localScale *= 0.45f;
