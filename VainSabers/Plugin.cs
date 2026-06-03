@@ -72,7 +72,7 @@ internal class Plugin
 
 public static class VainSabersAssets
 {
-    private static readonly bool DEBUG_LOAD_VS_ASSETS_FROM_FILE = true;
+    private static readonly bool DEBUG_LOAD_VS_ASSETS_FROM_FILE = false;
     private const string VS_ASSETS_FILENAME = "vs_assets";
     private const string VS_ASSETS_PROJECT_PATH = @"C:\Users\dbasp\RiderProjects\VainSabers\VainSabers\vs_assets";
 
