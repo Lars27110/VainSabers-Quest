@@ -1,14 +1,15 @@
 {
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.schema.json",
+  "version": "0.1.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
-  "version": "0.1.0",
   "info": {
-    "name": "#{name}",
-    "id": "#{id}",
+    "name": "VainSabers-Quest",
+    "id": "VainSabers",
     "version": "0.1.0",
     "url": null,
     "additionalData": {
-      "overrideSoName": "lib#{id}.so",
+      "overrideSoName": "libvainsabers.so",
       "cmake": true
     }
   },
@@ -17,7 +18,9 @@
       "build": [
         "pwsh ./scripts/build.ps1"
       ],
-      "clean": ["pwsh ./scripts/build.ps1 -clean"],
+      "clean": [
+        "pwsh ./scripts/build.ps1 -clean"
+      ],
       "copy": [
         "pwsh ./scripts/copy.ps1 $0:?"
       ],
@@ -38,13 +41,17 @@
         "pwsh ./scripts/pull-tombstone.ps1"
       ]
     },
-    "qmodIncludeDirs": ["./build", "./extern/libs"],
+    "qmodIncludeDirs": [
+      "./build",
+      "./extern/libs"
+    ],
+    "qmodIncludeFiles": [],
     "qmodOutput": "./#{name}.qmod"
   },
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^5.0.0",
+      "versionRange": "^7.4.2",
       "additionalData": {}
     },
     {
@@ -57,6 +64,11 @@
     {
       "id": "paper",
       "versionRange": "^3.0.0",
+      "additionalData": {}
+    },
+    {
+      "id": "bs-cordl",
+      "versionRange": "^4008.0.0",
       "additionalData": {}
     }
   ]
