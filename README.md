@@ -1,8 +1,9 @@
+### THIS PORTAGE WAS CARRIED OUT WITH THE AID OF AI FOR GUARANTEED SPEED!
+
 VainSabers is a blursaber mod for beat saber, like ReeSabers but worse.
 
-*this seems to be incompatible with customsaberslite, so disable whichever one you aren't using at the moment*
-This is somewhat buggy in its current state. It works well once you get it going and all configured.
+VainSabers asset creation` is the unity project used to create the asset bundle used, and also has some code adapted from the mod to help visualize stuff.
 
-`VainSabers` is the source project, which has the main mod code. `VainSabers asset creation` is the unity project used to create the asset bundle used, and also has some code adapted from the mod to help visualize stuff.
+AI was used to help with UI
 
-AI was used to help with ui
+A big thank you to Vainstains for creating the original mod, and to the whole team for the quest mod template.
