@@ -7,3 +7,7 @@ VainSabers asset creation` is the unity project used to create the asset bundle 
 AI was used to help with UI
 
 A big thank you to Vainstains for creating the original mod, and to the whole team for the quest mod template.
+
+## Note for Sabers developers:
+
+Please AVOID INCOMPATIBLE SHADERS, OTHERWISE...THE SABERS WON'T WORK ON QUEST!
