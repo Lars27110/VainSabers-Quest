@@ -1,4 +1,4 @@
-# #VainSabers-Quest
+# VainSabers-Quest
 
 ### THIS PORTAGE WAS CARRIED OUT WITH THE AID OF AI FOR GUARANTEED SPEED!
 VainSabers is a blursaber mod for beat saber, like ReeSabers but worse.
