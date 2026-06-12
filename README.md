@@ -1,6 +1,6 @@
 # VainSabers-Quest
 
-### THIS PORTAGE WAS CARRIED OUT WITH THE AID OF AI FOR GUARANTEED SPEED!
+### THIS PORTAGE WAS CARRIED OUT WITH THE HELP OF AI FOR GUARANTEED SPEED!
 VainSabers is a blursaber mod for beat saber, like ReeSabers but worse.
 
 VainSabers asset creation` is the unity project used to create the asset bundle used, and also has some code adapted from the mod to help visualize stuff.
